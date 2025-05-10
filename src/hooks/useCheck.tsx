@@ -15,6 +15,7 @@ const regexProper = (
     codechef: /^(https?:\/\/)?(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$/,
     resume: /^(https?:\/\/)?(drive\.google\.com)\/.*$/,
     phone: /^\d{10}$/,
+    description: /^(?:\b\w+\b[\s\r\n]*){30,}$
   };
   return regex[name].test(url);
 };
