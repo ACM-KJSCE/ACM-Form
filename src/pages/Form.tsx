@@ -14,7 +14,7 @@ function Form() {
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { allFilled, regexProper } = useCheck();
+  const { allFilled, regexProper, hasAtLeast30Words } = useCheck();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -178,11 +178,13 @@ function Form() {
         setLoading(false);
         return;
       }
-      if (regexProper(formData.whyACM, "description") === false) {
-        showToast("Description must be between 30 to 50 words.", "error");
+      if (hasAtLeast30Words(formData.whyACM) === false) {
+        showToast("Description must be at least 30 words.", "error");
         setLoading(false);
         return;
       }
+
+      
 
       if (!formData.role && !formData.role2) {
         showToast("Please select at least one role", "error");
