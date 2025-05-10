@@ -40,6 +40,10 @@ function Form() {
   ];
 
   const roleTY: string[] = [
+    "Chairperson",
+    "Vice Chairperson",
+    "Secretary",
+    "Treasurer",
     "Technical Head",
     "Creative Head",
     "Marketing Head",
@@ -54,21 +58,25 @@ function Form() {
       navigate("/");
       return;
     }
+
     const checkSubmission = async () => {
       try {
         const formRef = doc(db, "applications", user.uid);
         const docSnap = await getDoc(formRef);
 
-        if (docSnap.exists() && docSnap.data().submitted) {
-          navigate("/success");
-          return;
+        if (docSnap.exists()) {
+          if (docSnap.data().submitted) {
+            navigate("/success");
+            return;
+          }
+          setFormData(docSnap.data() as FormData);
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            fullName: user.displayName || "",
+            email: user.email || "",
+          }));
         }
-
-        setFormData((prev) => ({
-          ...prev,
-          fullName: user.displayName || "",
-          email: user.email || "",
-        }));
       } catch (error) {
         const errorMessage =
           error instanceof Error
@@ -274,6 +282,7 @@ function Form() {
                   required
                   value={formData.rollNumber}
                   onChange={handleChange}
+                  maxLength={11}
                   placeholder="Enter your roll number"
                   className=" p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
@@ -337,6 +346,7 @@ function Form() {
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
+                  maxLength={10}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
@@ -464,7 +474,6 @@ function Form() {
               <select
                 name="role2"
                 id="role2"
-                required
                 value={formData.role2}
                 onChange={handleChange}
                 disabled={!formData.year}
