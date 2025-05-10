@@ -44,7 +44,7 @@ function Login() {
           <h1 className="text-3xl font-bold text-white mb-6 tracking-tight">
             KJSCE ACM Application
           </h1>
-          <div className="relative w-32 h-32 mx-auto mb-8">
+          <div className="relative mx-auto mb-8">
             <img
               src="https://kjsce.acm.org/logo_withoutbg.png"
               alt="Somaiya Logo"
@@ -62,7 +62,7 @@ function Login() {
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center bg-white hover:bg-gray-100 text-gray-900 py-3 px-4 rounded-lg transition duration-300 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center bg-white hover:bg-gray-300 hover:scale-105 cursor-pointer transition-all duration-300 text-gray-900 py-3 px-4 rounded-lg font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <div className="flex items-center">
