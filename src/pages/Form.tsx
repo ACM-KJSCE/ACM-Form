@@ -3,7 +3,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
 import { db } from "../configs/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import Submitting from "../components/Submitting";
 import { FormData } from "../interfaces/form";
 import useCheck from "./../hooks/useCheck";
@@ -54,12 +54,31 @@ function Form() {
       navigate("/");
       return;
     }
+    const checkSubmission = async () => {
+      try {
+        const formRef = doc(db, "applications", user.uid);
+        const docSnap = await getDoc(formRef);
 
-    setFormData((prev) => ({
-      ...prev,
-      fullName: user.displayName || "",
-      email: user.email || "",
-    }));
+        if (docSnap.exists() && docSnap.data().submitted) {
+          navigate("/success");
+          return;
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          fullName: user.displayName || "",
+          email: user.email || "",
+        }));
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Error checking submission status";
+        showToast(errorMessage, "error");
+      }
+    };
+
+    checkSubmission();
   }, [auth, navigate, showToast]);
 
   const autoSave = async (data: FormData) => {
