@@ -178,6 +178,12 @@ function Form() {
         setLoading(false);
         return;
       }
+      if (regexProper(formData.whyACM, "description") === false) {
+        showToast("Description must be between 30 to 50 words.", "error");
+        setLoading(false);
+        return;
+      }
+
       if (!formData.role && !formData.role2) {
         showToast("Please select at least one role", "error");
         setLoading(false);
@@ -188,7 +194,7 @@ function Form() {
         setLoading(false);
         return;
       }
-
+        
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated");
 

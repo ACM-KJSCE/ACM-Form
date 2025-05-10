@@ -7,7 +7,7 @@ const allFilled = (data: FormData) => {
 
 const regexProper = (
   url: string,
-  name: "github" | "linkedin" | "codechef" | "resume" | "phone"
+  name: "github" | "linkedin" | "codechef" | "resume" | "phone" | "description"
 ) => {
   const regex = {
     github: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/,
@@ -15,7 +15,7 @@ const regexProper = (
     codechef: /^(https?:\/\/)?(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$/,
     resume: /^(https?:\/\/)?(drive\.google\.com)\/.*$/,
     phone: /^\d{10}$/,
-    description: /^(?:\b\w+\b[\s\r\n]*){30,}$
+    description: /^(?:\b\w+\b[\s\r\n]*){30,50}$/
   };
   return regex[name].test(url);
 };
