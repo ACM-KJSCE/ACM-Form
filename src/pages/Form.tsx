@@ -40,6 +40,10 @@ function Form() {
   ];
 
   const roleTY: string[] = [
+    "Chairperson",
+    "Vice Chairperson",
+    "Secretary",
+    "Treasurer",
     "Technical Head",
     "Creative Head",
     "Marketing Head",
