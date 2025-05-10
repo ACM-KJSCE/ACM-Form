@@ -500,7 +500,7 @@ function Form() {
                 htmlFor="whyACM"
                 className="block text-sm font-medium text-gray-300"
               >
-                Why do you want to join ACM?
+                Why do you want to join ACM? (Answer in minimum 30 words)
               </label>
               <textarea
                 name="whyACM"
