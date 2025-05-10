@@ -13,9 +13,9 @@ const regexProper = (
     github: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/,
     linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/,
     codechef: /^(https?:\/\/)?(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$/,
-    resume: /^(https?:\/\/)?(drive\.google\.com)\/.*$/,
+    resume: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{10,})\/view$/,
     phone: /^\d{10}$/,
-    description: /^(?:\b\w+\b[\s\r\n]*){30,50}$/
+    description: /^(?:\b\w+\b[\s\r\n]*){30,}$/
   };
   return regex[name].test(url);
 };
