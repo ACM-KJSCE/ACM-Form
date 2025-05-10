@@ -12,6 +12,8 @@ interface FormData {
   whyACM: string;
   role: string;
   role2: string;
+  submitted?: boolean;
+  submittedAt?: string;
 }
 
 export type {FormData}

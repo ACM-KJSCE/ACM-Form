@@ -15,14 +15,21 @@ const Admin: React.FC = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
+  const stats = {
+    total: applications.length,
+    submitted: applications.filter((app) => app.submitted).length,
+    secondYear: applications.filter((app) => app.year === "2").length,
+    thirdYear: applications.filter((app) => app.year === "3").length,
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        navigate("/login");
+        navigate("/");
         return;
       }
 
-      const isAdmin = user.email === "minav.karia@somaiya.edu"; 
+      const isAdmin = user.email === "minav.karia@somaiya.edu";
       if (!isAdmin) {
         showToast("Unauthorized access", "error");
         navigate("/");
@@ -36,9 +43,13 @@ const Admin: React.FC = () => {
           apps.push(doc.data() as FormData);
         });
         setApplications(apps);
-      } catch (err) {
-        setError("Failed to fetch applications");
-        showToast("Failed to fetch applications", "error");
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch applications";
+        setError(errorMessage);
+        showToast(errorMessage, "error");
       } finally {
         setLoading(false);
       }
@@ -54,8 +65,12 @@ const Admin: React.FC = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
       XLSX.writeFile(workbook, "acm_applications.xlsx");
       showToast("Excel file downloaded successfully", "success");
-    } catch (err) {
-      showToast("Failed to download Excel file", "error");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to download Excel file";
+      showToast(errorMessage, "error");
     }
   };
 
@@ -90,6 +105,28 @@ const Admin: React.FC = () => {
           </button>
         </div>
 
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <h3 className="text-gray-400 text-sm">Total Applications</h3>
+            <p className="text-2xl font-bold">{stats.total}</p>
+          </div>
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <h3 className="text-gray-400 text-sm">Submitted</h3>
+            <p className="text-2xl font-bold text-green-500">
+              {stats.submitted}
+            </p>
+          </div>
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <h3 className="text-gray-400 text-sm">Second Year</h3>
+            <p className="text-2xl font-bold">{stats.secondYear}</p>
+          </div>
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <h3 className="text-gray-400 text-sm">Third Year</h3>
+            <p className="text-2xl font-bold">{stats.thirdYear}</p>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -102,6 +139,7 @@ const Admin: React.FC = () => {
                 <th className="p-4 text-left">Phone</th>
                 <th className="p-4 text-left">Role</th>
                 <th className="p-4 text-left">Role 2</th>
+                <th className="p-4 text-left">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -118,6 +156,17 @@ const Admin: React.FC = () => {
                   <td className="p-4">{app.phoneNumber}</td>
                   <td className="p-4">{app.role}</td>
                   <td className="p-4">{app.role2}</td>
+                  <td className="p-4">
+                    {app.submitted ? (
+                      <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
+                        Submitted
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm">
+                        Draft
+                      </span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
