@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../configs/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../configs/firebase";
 
 function Login() {
   const [error, setError] = useState<string | null>(null);
@@ -9,9 +11,13 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        if (currentUser.email?.endsWith("somaiya.edu")) {
+        const formRef = doc(db, "applications", currentUser.uid);
+        const docSnap = await getDoc(formRef);
+        if (currentUser.email?.endsWith("somaiya.edu") && docSnap.exists() && docSnap.data()?.submitted) {
+          navigate("/success");
+        } else if (currentUser.email?.endsWith("somaiya.edu")) {
           navigate("/form");
         } else {
           signOut(auth).then(() => {
@@ -27,6 +33,12 @@ function Login() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError(null);
+
+    provider.setCustomParameters({
+      prompt: "select_account",
+      hd: "somaiya.edu",
+      login_hint: "somaiya.edu",
+    });
 
     try {
       await signInWithPopup(auth, provider);
