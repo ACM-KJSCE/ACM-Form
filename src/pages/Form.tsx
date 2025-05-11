@@ -186,8 +186,6 @@ function Form() {
         return;
       }
 
-      
-
       if (!formData.role && !formData.role2) {
         showToast("Please select at least one role", "error");
         setLoading(false);
@@ -198,7 +196,7 @@ function Form() {
         setLoading(false);
         return;
       }
-        
+
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated");
 
@@ -248,7 +246,7 @@ function Form() {
                   htmlFor="fullName"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Full Name
+                  Full Name<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="text"
@@ -266,7 +264,7 @@ function Form() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Email
+                  Email<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="email"
@@ -284,7 +282,7 @@ function Form() {
                   htmlFor="rollNumber"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Roll Number
+                  Roll Number<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="text"
@@ -292,7 +290,7 @@ function Form() {
                   id="rollNumber"
                   required
                   value={formData.rollNumber}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   maxLength={11}
                   placeholder="Enter your roll number"
@@ -305,14 +303,14 @@ function Form() {
                   htmlFor="branch"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Branch
+                  Branch<text className="text-red-600">*</text>
                 </label>
                 <select
                   name="branch"
                   id="branch"
                   required
                   value={formData.branch}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
@@ -320,6 +318,9 @@ function Form() {
                   <option value="CSE">Computer Science</option>
                   <option value="IT">Information Technology</option>
                   <option value="AIDS">AI & Data Science</option>
+                  <option value="CSBS">
+                    Computer Science and Business Systems
+                  </option>
                   <option value="EXTC">Electronics & Telecommunication</option>
                 </select>
               </div>
@@ -329,14 +330,14 @@ function Form() {
                   htmlFor="year"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Year
+                  Year<text className="text-red-600">*</text>
                 </label>
                 <select
                   name="year"
                   id="year"
                   required
                   value={formData.year}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
@@ -351,7 +352,7 @@ function Form() {
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Phone Number
+                  Phone Number<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="tel"
@@ -359,7 +360,7 @@ function Form() {
                   id="phoneNumber"
                   required
                   value={formData.phoneNumber}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   maxLength={10}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
@@ -379,7 +380,7 @@ function Form() {
                   id="githubProfile"
                   required
                   value={formData.githubProfile}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://github.com/yourusername"
                   pattern="^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$"
@@ -392,7 +393,7 @@ function Form() {
                   htmlFor="linkedinProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  LinkedIn Profile
+                  LinkedIn Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -400,7 +401,7 @@ function Form() {
                   id="linkedinProfile"
                   required
                   value={formData.linkedinProfile}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   pattern="^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$"
                   placeholder="https://linkedin.com/in/yourusername"
@@ -421,7 +422,7 @@ function Form() {
                   id="codechefProfile"
                   required
                   value={formData.codechefProfile}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://www.codechef.com/users/yourusername"
                   pattern="^https?:\/\/(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$"
@@ -434,7 +435,7 @@ function Form() {
                   htmlFor="resume"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Resume Link
+                  Resume Link<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -442,7 +443,7 @@ function Form() {
                   id="resume"
                   required
                   value={formData.resume}
-                  disabled={localStorage.getItem("ViewForm")=== "true"}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://drive.google.com/file/d/yourfileid/view"
                   pattern="^https?:\/\/(drive\.google\.com)\/.*$"
@@ -456,7 +457,7 @@ function Form() {
                 htmlFor="role"
                 className="block text-sm font-medium text-gray-300"
               >
-                Role Choice 1
+                Role Choice 1<text className="text-red-600">*</text>
               </label>
               <select
                 name="role"
@@ -464,7 +465,9 @@ function Form() {
                 required
                 value={formData.role}
                 onChange={handleChange}
-                disabled={!formData.year || localStorage.getItem("ViewForm")=== "true"}
+                disabled={
+                  !formData.year || localStorage.getItem("ViewForm") === "true"
+                }
                 aria-label="Select your first role preference"
                 className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
@@ -495,7 +498,9 @@ function Form() {
                 id="role2"
                 value={formData.role2}
                 onChange={handleChange}
-                disabled={!formData.year || localStorage.getItem("ViewForm") === "true"}
+                disabled={
+                  !formData.year || localStorage.getItem("ViewForm") === "true"
+                }
                 aria-label="Select your second role preference"
                 className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
@@ -520,6 +525,7 @@ function Form() {
                 className="block text-sm font-medium text-gray-300"
               >
                 Why do you want to join ACM? (Answer in minimum 30 words)
+                <text className="text-red-600">*</text>
               </label>
               <textarea
                 name="whyACM"
@@ -527,7 +533,7 @@ function Form() {
                 rows={3}
                 required
                 value={formData.whyACM}
-                disabled={localStorage.getItem("ViewForm")=== "true"}
+                disabled={localStorage.getItem("ViewForm") === "true"}
                 onChange={handleChange}
                 className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               />
