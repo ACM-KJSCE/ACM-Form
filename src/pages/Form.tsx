@@ -314,14 +314,18 @@ function Form() {
                   onChange={handleChange}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
-                  <option value="">Select Branch</option>
-                  <option value="CSE">Computer Science</option>
-                  <option value="IT">Information Technology</option>
-                  <option value="AIDS">AI & Data Science</option>
-                  <option value="CSBS">
-                    Computer Science and Business Systems
+                  <option>Computer Engineering</option>
+                  <option>Information Technology</option>
+                  <option>Electronics & Computer Engineering</option>
+                  <option>Computer & Communication Engineering</option>
+                  <option>Computer Science & Business Systems</option>
+                  <option>Electronics & Telecommunication Engineering</option>
+                  <option>
+                    Electronics Engineering (VLSI Design & Technology)
                   </option>
-                  <option value="EXTC">Electronics & Telecommunication</option>
+                  <option>Mechanical Engineering</option>
+                  <option>Robotics & Artificial Intelligence</option>
+                  <option>Artificial Intelligence & Data Science</option>
                 </select>
               </div>
 
