@@ -372,7 +372,7 @@ function Form() {
                   htmlFor="githubProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  GitHub Profile
+                  GitHub Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -414,7 +414,7 @@ function Form() {
                   htmlFor="codechefProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Codechef Profile
+                  Codechef Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
