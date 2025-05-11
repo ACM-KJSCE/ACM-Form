@@ -65,7 +65,8 @@ function Form() {
         const docSnap = await getDoc(formRef);
 
         if (docSnap.exists()) {
-          if (docSnap.data().submitted) {
+          if (docSnap.data().submitted && !localStorage.getItem("ViewForm")) {
+            localStorage.setItem("ViewForm", "true");
             navigate("/success");
             return;
           }
@@ -132,6 +133,7 @@ function Form() {
       }
 
       await signOut(auth);
+      localStorage.removeItem("ViewForm");
       showToast("Logged out successfully", "success");
       navigate("/");
     } catch (error) {
@@ -208,6 +210,7 @@ function Form() {
       });
 
       showToast("Application submitted successfully!", "success");
+      localStorage.setItem("ViewForm", "true");
       navigate("/success");
     } catch (error) {
       const errorMessage =
@@ -289,6 +292,7 @@ function Form() {
                   id="rollNumber"
                   required
                   value={formData.rollNumber}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   maxLength={11}
                   placeholder="Enter your roll number"
@@ -308,6 +312,7 @@ function Form() {
                   id="branch"
                   required
                   value={formData.branch}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
@@ -331,6 +336,7 @@ function Form() {
                   id="year"
                   required
                   value={formData.year}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
@@ -353,6 +359,7 @@ function Form() {
                   id="phoneNumber"
                   required
                   value={formData.phoneNumber}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   maxLength={10}
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
@@ -372,6 +379,7 @@ function Form() {
                   id="githubProfile"
                   required
                   value={formData.githubProfile}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   placeholder="https://github.com/yourusername"
                   pattern="^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$"
@@ -392,6 +400,7 @@ function Form() {
                   id="linkedinProfile"
                   required
                   value={formData.linkedinProfile}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   pattern="^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$"
                   placeholder="https://linkedin.com/in/yourusername"
@@ -412,6 +421,7 @@ function Form() {
                   id="codechefProfile"
                   required
                   value={formData.codechefProfile}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   placeholder="https://www.codechef.com/users/yourusername"
                   pattern="^https?:\/\/(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$"
@@ -432,6 +442,7 @@ function Form() {
                   id="resume"
                   required
                   value={formData.resume}
+                  disabled={localStorage.getItem("ViewForm")=== "true"}
                   onChange={handleChange}
                   placeholder="https://drive.google.com/file/d/yourfileid/view"
                   pattern="^https?:\/\/(drive\.google\.com)\/.*$"
@@ -453,7 +464,7 @@ function Form() {
                 required
                 value={formData.role}
                 onChange={handleChange}
-                disabled={!formData.year}
+                disabled={!formData.year || localStorage.getItem("ViewForm")=== "true"}
                 aria-label="Select your first role preference"
                 className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
@@ -484,7 +495,7 @@ function Form() {
                 id="role2"
                 value={formData.role2}
                 onChange={handleChange}
-                disabled={!formData.year}
+                disabled={!formData.year || localStorage.getItem("ViewForm") === "true"}
                 aria-label="Select your second role preference"
                 className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
@@ -516,6 +527,7 @@ function Form() {
                 rows={3}
                 required
                 value={formData.whyACM}
+                disabled={localStorage.getItem("ViewForm")=== "true"}
                 onChange={handleChange}
                 className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               />
@@ -529,19 +541,21 @@ function Form() {
               >
                 Logout
               </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
-              >
-                {loading ? (
-                  <>
-                    <Submitting />
-                  </>
-                ) : (
-                  "Submit Application"
-                )}
-              </button>
+              {!localStorage.getItem("ViewForm") && (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
+                >
+                  {loading ? (
+                    <>
+                      <Submitting />
+                    </>
+                  ) : (
+                    "Submit Application"
+                  )}
+                </button>
+              )}
             </div>
           </form>
         </div>

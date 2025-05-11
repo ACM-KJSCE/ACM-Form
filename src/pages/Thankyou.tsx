@@ -7,9 +7,11 @@ const ThankYou: React.FC = () => {
   const navigate = useNavigate();
   const auth = getAuth();
   const { showToast } = useToast();
+  localStorage.setItem("ViewForm", "true");
 
   const handleLogout = async () => {
     try {
+      localStorage.removeItem("ViewForm");
       await signOut(auth);
       showToast("Logged out successfully", "success");
       navigate("/");
@@ -17,6 +19,13 @@ const ThankYou: React.FC = () => {
       showToast("Failed to logout", "error");
     }
   };
+
+  const handleViewForm = () => {
+    const ViewForm = localStorage.getItem("ViewForm");
+    if (ViewForm === "true") {
+      navigate("/form");
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -35,6 +44,13 @@ const ThankYou: React.FC = () => {
         </p>
 
         <button
+          onClick={handleViewForm}
+          className="bg-green-600 hover:bg-green-700 hover:scale-105 transition-all duration-300 text-white px-6 py-3 rounded-lg font-medium cursor-pointer mb-6 sm:mr-6"
+        >
+          View Submitted Form
+        </button>
+
+        <button
           onClick={handleLogout}
           className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-300 text-white px-6 py-3 rounded-lg font-medium cursor-pointer"
         >
@@ -42,7 +58,7 @@ const ThankYou: React.FC = () => {
         </button>
       </div>
     </div>
-  );
+  );  
 };
 
 export default ThankYou;
