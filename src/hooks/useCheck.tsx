@@ -7,9 +7,10 @@ const allFilled = (data: FormData) => {
 
 const regexProper = (
   url: string,
-  name: "github" | "linkedin" | "codechef" | "resume" | "phone" | "description"
+  name: "roll" | "github" | "linkedin" | "codechef" | "resume" | "phone" | "description"
 ) => {
   const regex = {
+    roll: /^\d{11}$/,
     github: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/,
     linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/,
     codechef: /^(https?:\/\/)?(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$/,
