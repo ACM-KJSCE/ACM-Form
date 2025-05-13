@@ -37,6 +37,8 @@ const router = createBrowserRouter([
             </>
         )
     }
-]);
+],{
+    basename:"/join"
+});
 
 export default router;
