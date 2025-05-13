@@ -154,7 +154,11 @@ function Form() {
         setLoading(false);
         return;
       }
-
+      if (regexProper(formData.rollNumber, "roll") === false) {
+        showToast("Please enter a valid roll number", "error");
+        setLoading(false);
+        return;
+      }
       if (regexProper(formData.phoneNumber, "phone") === false) {
         showToast("Please enter a valid phone number", "error");
         setLoading(false);
