@@ -117,6 +117,9 @@ function Form() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    if (localStorage.getItem("ViewForm") === "true") {
+      return;
+    }
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
