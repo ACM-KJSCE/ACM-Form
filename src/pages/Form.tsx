@@ -67,7 +67,7 @@ function Form() {
         const docSnap = await getDoc(formRef);
 
         if (docSnap.exists()) {
-          if (docSnap.data().submitted && !localStorage.getItem("ViewForm")) {
+          if (docSnap.data().submitted) {
             localStorage.setItem("ViewForm", "true");
             navigate("/success");
             setFetching(false);
