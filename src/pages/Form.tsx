@@ -7,6 +7,7 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import Submitting from "../components/Submitting";
 import { FormData } from "../interfaces/form";
 import useCheck from "./../hooks/useCheck";
+import Loader from "../components/Loader";
 
 function Form() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ function Form() {
     role: "",
     role2: "",
   });
+  const [fetching, setFetching] = useState(true);
 
   const roleSY: string[] = [
     "Technical Team",
@@ -52,14 +54,14 @@ function Form() {
   ];
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) {
-      showToast("Please login to access the form", "error");
-      navigate("/");
-      return;
-    }
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        showToast("Please login to access the form", "error");
+        navigate("/");
+        setFetching(false);
+        return;
+      }
 
-    const checkSubmission = async () => {
       try {
         const formRef = doc(db, "applications", user.uid);
         const docSnap = await getDoc(formRef);
@@ -68,6 +70,7 @@ function Form() {
           if (docSnap.data().submitted && !localStorage.getItem("ViewForm")) {
             localStorage.setItem("ViewForm", "true");
             navigate("/success");
+            setFetching(false);
             return;
           }
           setFormData(docSnap.data() as FormData);
@@ -84,10 +87,12 @@ function Form() {
             ? error.message
             : "Error checking submission status";
         showToast(errorMessage, "error");
+      } finally {
+        setFetching(false);
       }
-    };
+    });
 
-    checkSubmission();
+    return () => unsubscribe();
   }, [auth, navigate, showToast]);
 
   const autoSave = async (data: FormData) => {
@@ -188,7 +193,7 @@ function Form() {
         return;
       }
       if (hasAtLeast30Words(formData.whyACM) === false) {
-        showToast("Description must be at least 30 words.", "error");
+        showToast("Answer must be at least 30 words.", "error");
         setLoading(false);
         return;
       }
@@ -227,6 +232,12 @@ function Form() {
     }
   };
 
+  if (fetching) {
+    return (
+      <Loader/>
+    );
+  }
+
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -259,7 +270,7 @@ function Form() {
                   type="text"
                   name="fullName"
                   id="fullName"
-                  required
+                  // required
                   value={formData.fullName}
                   disabled
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-gray-400 shadow-sm cursor-not-allowed"
@@ -277,7 +288,7 @@ function Form() {
                   type="email"
                   name="email"
                   id="email"
-                  required
+                  // required
                   value={formData.email}
                   disabled
                   className=" p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-gray-400 shadow-sm cursor-not-allowed"
@@ -295,7 +306,7 @@ function Form() {
                   type="text"
                   name="rollNumber"
                   id="rollNumber"
-                  required
+                  // required
                   value={formData.rollNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
@@ -315,12 +326,13 @@ function Form() {
                 <select
                   name="branch"
                   id="branch"
-                  required
+                  // required
                   value={formData.branch}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
+                  <option value="">Select Branch</option>
                   <option>Computer Engineering</option>
                   <option>Information Technology</option>
                   <option>Electronics & Computer Engineering</option>
@@ -346,11 +358,11 @@ function Form() {
                 <select
                   name="year"
                   id="year"
-                  required
+                  // required
                   value={formData.year}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 >
                   <option value="">Select Year</option>
                   <option value="2">Second Year</option>
@@ -369,7 +381,7 @@ function Form() {
                   type="tel"
                   name="phoneNumber"
                   id="phoneNumber"
-                  required
+                  // required
                   value={formData.phoneNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
@@ -473,14 +485,14 @@ function Form() {
               <select
                 name="role"
                 id="role"
-                required
+                // required
                 value={formData.role}
                 onChange={handleChange}
                 disabled={
                   !formData.year || localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your first role preference"
-                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
                 <option value="">Select Role </option>
                 {formData.year === "2"
@@ -513,7 +525,7 @@ function Form() {
                   !formData.year || localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your second role preference"
-                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
               >
                 <option value="">Select Role </option>
                 {formData.year === "2"
@@ -542,7 +554,7 @@ function Form() {
                 name="whyACM"
                 id="whyACM"
                 rows={3}
-                required
+                // required 
                 value={formData.whyACM}
                 disabled={localStorage.getItem("ViewForm") === "true"}
                 onChange={handleChange}

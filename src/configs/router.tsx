@@ -3,6 +3,7 @@ import Login from '../pages/Login'
 import Form from "../pages/Form";
 import Thankyou from "../pages/Thankyou";
 import Admin from "../pages/Admin";
+import Preview from "../pages/Preview";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,15 @@ const router = createBrowserRouter([
                 <Admin/>
             </>
         )
+    },
+    {
+        path:"/preview",
+        element: (
+            <>
+                <Preview/>
+            </>
+        )
+
     }
 ],{
     basename:"/join"
