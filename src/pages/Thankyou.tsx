@@ -23,7 +23,7 @@ const ThankYou: React.FC = () => {
   const handleViewForm = () => {
     const ViewForm = localStorage.getItem("ViewForm");
     if (ViewForm === "true") {
-      navigate("/form");
+      navigate("/preview");
     }
   }
 
