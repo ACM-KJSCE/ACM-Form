@@ -14,6 +14,7 @@ interface FormData {
   role2: string;
   submitted?: boolean;
   submittedAt?: string;
+  membershipNumber: string;
 }
 
 export type {FormData}

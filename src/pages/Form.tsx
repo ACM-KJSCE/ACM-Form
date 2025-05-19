@@ -30,8 +30,11 @@ function Form() {
     whyACM: "",
     role: "",
     role2: "",
+    membershipNumber: "",
   });
   const [fetching, setFetching] = useState(true);
+  const [hasMembership, setHasMembership] = useState<boolean>(!!formData.membershipNumber);
+
 
   const roleSY: string[] = [
     "Technical Team",
@@ -125,11 +128,23 @@ function Form() {
     if (localStorage.getItem("ViewForm") === "true") {
       return;
     }
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type} = e.target;
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;  
+
+    if (name === "membercheck") {
+      setHasMembership(checked);
+      setFormData((prev) => ({
+        ...prev,
+        membershipNumber: checked ? prev.membershipNumber : "",
+      }));
+    }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleLogout = async () => {
@@ -157,7 +172,20 @@ function Form() {
     setError(null);
 
     try {
-      if (!allFilled(formData)) {
+      if (!formData.fullName ||
+        !formData.email ||
+        !formData.rollNumber ||
+        !formData.branch ||
+        !formData.year ||
+        !formData.phoneNumber ||
+        !formData.githubProfile ||
+        !formData.linkedinProfile ||
+        !formData.codechefProfile ||
+        !formData.resume ||
+        !formData.role ||
+        !formData.role2 ||
+        !formData.whyACM ||
+        (hasMembership && !formData.membershipNumber)) {
         showToast("Please fill all the fields", "error");
         setLoading(false);
         return;
@@ -205,6 +233,11 @@ function Form() {
       }
       if (formData.role === formData.role2) {
         showToast("Please select different roles", "error");
+        setLoading(false);
+        return;
+      }
+      if (hasMembership && formData.membershipNumber.trim() === "") {
+        showToast("Please enter your ACM Membership Number", "error");
         setLoading(false);
         return;
       }
@@ -453,7 +486,9 @@ function Form() {
                 />
               </div>
 
-              <div>
+            </div>
+
+            <div>
                 <label
                   htmlFor="resume"
                   className="block text-sm font-medium text-gray-300"
@@ -473,8 +508,47 @@ function Form() {
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
-            </div>
 
+              <div className="pt-5 flex items-center">
+                <input
+                  type="checkbox"
+                  name="membercheck"
+                  id="memberCheck"
+                  checked={hasMembership}
+                  onChange={handleChange}
+                  className="h-5 w-5 text-blue-600 bg-gray-800/50 border-gray-700 rounded focus:ring-blue-500 transition-colors"
+                />
+                <label
+                  htmlFor="memberCheck"
+                  className="text-sm font-medium text-gray-300 pl-3"
+                >
+                  Do you have an ACM membership?
+                </label>
+              </div>
+
+              {hasMembership && (
+                <div className="mt-4">
+                  <label
+                    htmlFor="membershipNumber"
+                    className="block text-sm font-medium text-gray-300"
+                  >
+                    Membership Number<span className="text-red-600"> *</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="membershipNumber"
+                    id="membershipNumber"
+                    required
+                    value={formData.membershipNumber}
+                    disabled={localStorage.getItem("ViewForm") === "true"}
+                    onChange={handleChange}
+                    maxLength={10}
+                    className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  />
+                </div>
+              )}
+
+            
             <div>
               <label
                 htmlFor="role"
@@ -514,7 +588,7 @@ function Form() {
                 htmlFor="role2"
                 className="block text-sm font-medium text-gray-300"
               >
-                Role Choice 2
+                Role Choice 2<text className="text-red-600">*</text>
               </label>
               <select
                 name="role2"
