@@ -2,16 +2,16 @@ import { FormData } from "../interfaces/form";
 
 const allFilled = (data: FormData, hasMembership: boolean = false) => {
   console.log(data)
-  const values = hasMembership 
+  const values = hasMembership
     ? Object.entries(data)
     : Object.entries(data).filter(([key]) => key !== 'membershipNumber');
-  
+
   return values.every(([_, value]) => value.trim() !== "");
 };
 
 const regexProper = (
   url: string,
-  name: "roll" | "github" | "linkedin" | "codechef" | "resume" | "phone" | "description" | "acmID"
+  name: "roll" | "github" | "linkedin" | "codechef" | "resume" | "phone" | "description" | "acmID" | "cg"
 ) => {
   const regex = {
     roll: /^\d{11}$/,
@@ -21,7 +21,8 @@ const regexProper = (
     resume: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)(?:\/view(?:\?[^ ]*)?)?$/,
     phone: /^\d{10}$/,
     description: /^(?:\b\w+\b[\s\r\n]*){30,}$/,
-    acmID: /^\d{7}$/
+    acmID: /^\d{7}$/,
+    cg: /^(10(\.0{1,2})?|[0-9](\.\d{1,2})?)$/
   };
   return regex[name].test(url);
 };

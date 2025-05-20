@@ -15,7 +15,7 @@ interface FormData {
   submitted?: boolean;
   submittedAt?: string;
   membershipNumber: string;
+  cgpa: string;
 }
 
 export type {FormData}
-  

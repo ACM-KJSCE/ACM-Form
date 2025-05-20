@@ -31,6 +31,7 @@ function Form() {
     role: "",
     role2: "",
     membershipNumber: "",
+    cgpa: "",
   });
   const [fetching, setFetching] = useState(true);
   const [hasMembership, setHasMembership] = useState<boolean>(!!formData.membershipNumber);
@@ -138,7 +139,7 @@ function Form() {
     }
     const { name, value, type} = e.target;
     if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;  
+      const checked = (e.target as HTMLInputElement).checked;
 
     if (name === "membercheck") {
       setHasMembership(checked);
@@ -239,6 +240,11 @@ function Form() {
       }
       if (hasMembership && formData.membershipNumber.trim() === "") {
         showToast("Please enter your ACM Membership Number", "error");
+        setLoading(false);
+        return;
+      }
+      if (regexProper(formData.cgpa, "cg") === false) {
+        showToast("Please enter a valid CGPA", "error");
         setLoading(false);
         return;
       }
@@ -404,6 +410,26 @@ function Form() {
                 </select>
               </div>
 
+            <div>
+                <label
+                  htmlFor="cgpa"
+                  className="block text-sm font-medium text-gray-300"
+                >
+                  CGPA<text className="text-red-600">*</text>
+                </label>
+                <input
+                  type="tel"
+                  name="cgpa"
+                  id="cgpa"
+                  // required
+                  value={formData.cgpa}
+                  disabled={localStorage.getItem("ViewForm") === "true"}
+                  onChange={handleChange}
+                  maxLength={10}
+                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                />
+              </div>
+
               <div>
                 <label
                   htmlFor="phoneNumber"
@@ -423,7 +449,7 @@ function Form() {
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
-              
+
 
               <div>
                 <label
@@ -505,7 +531,7 @@ function Form() {
 
             </div>
 
-            
+
 
               <div className="pt-2 flex items-center">
                 <input
@@ -549,7 +575,7 @@ function Form() {
 
             <hr className=" border-white/50"/>
 
-            
+
             <div>
               <label
                 htmlFor="role"
@@ -629,7 +655,7 @@ function Form() {
                 name="whyACM"
                 id="whyACM"
                 rows={3}
-                // required 
+                // required
                 value={formData.whyACM}
                 disabled={localStorage.getItem("ViewForm") === "true"}
                 onChange={handleChange}
