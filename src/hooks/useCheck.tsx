@@ -1,13 +1,17 @@
 import { FormData } from "../interfaces/form";
 
-const allFilled = (data: FormData) => {
-    console.log(data);
-  return Object.values(data).every((value) => value.trim() !== "");
+const allFilled = (data: FormData, hasMembership: boolean = false) => {
+  console.log(data)
+  const values = hasMembership 
+    ? Object.entries(data)
+    : Object.entries(data).filter(([key]) => key !== 'membershipNumber');
+  
+  return values.every(([_, value]) => value.trim() !== "");
 };
 
 const regexProper = (
   url: string,
-  name: "roll" | "github" | "linkedin" | "codechef" | "resume" | "phone" | "description"
+  name: "roll" | "github" | "linkedin" | "codechef" | "resume" | "phone" | "description" | "acmID"
 ) => {
   const regex = {
     roll: /^\d{11}$/,
@@ -16,7 +20,8 @@ const regexProper = (
     codechef: /^(https?:\/\/)?(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$/,
     resume: /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)(?:\/view(?:\?[^ ]*)?)?$/,
     phone: /^\d{10}$/,
-    description: /^(?:\b\w+\b[\s\r\n]*){30,}$/
+    description: /^(?:\b\w+\b[\s\r\n]*){30,}$/,
+    acmID: /^\d{7}$/
   };
   return regex[name].test(url);
 };

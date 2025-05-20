@@ -57,6 +57,14 @@ function Form() {
   ];
 
   useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      role: "",
+      role2: "",
+    }));
+  },[formData.year]);
+
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         showToast("Please login to access the form", "error");
@@ -172,20 +180,7 @@ function Form() {
     setError(null);
 
     try {
-      if (!formData.fullName ||
-        !formData.email ||
-        !formData.rollNumber ||
-        !formData.branch ||
-        !formData.year ||
-        !formData.phoneNumber ||
-        !formData.githubProfile ||
-        !formData.linkedinProfile ||
-        !formData.codechefProfile ||
-        !formData.resume ||
-        !formData.role ||
-        !formData.role2 ||
-        !formData.whyACM ||
-        (hasMembership && !formData.membershipNumber)) {
+      if (!allFilled(formData,hasMembership) ) {
         showToast("Please fill all the fields", "error");
         setLoading(false);
         return;
@@ -222,6 +217,12 @@ function Form() {
       }
       if (hasAtLeast30Words(formData.whyACM) === false) {
         showToast("Answer must be at least 30 words.", "error");
+        setLoading(false);
+        return;
+      }
+
+      if(hasMembership && regexProper(formData.membershipNumber, "acmID") === false) {
+        showToast("Please enter a valid ACM Membership Number", "error");
         setLoading(false);
         return;
       }
@@ -422,6 +423,7 @@ function Form() {
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
+              
 
               <div>
                 <label
@@ -434,12 +436,11 @@ function Form() {
                   type="url"
                   name="githubProfile"
                   id="githubProfile"
-                  required
+                  // required
                   value={formData.githubProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://github.com/yourusername"
-                  pattern="^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$"
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
@@ -459,8 +460,6 @@ function Form() {
                   value={formData.linkedinProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  pattern="^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$"
-                  placeholder="https://linkedin.com/in/yourusername"
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
@@ -476,19 +475,15 @@ function Form() {
                   type="url"
                   name="codechefProfile"
                   id="codechefProfile"
-                  required
+                  // required
                   value={formData.codechefProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://www.codechef.com/users/yourusername"
-                  pattern="^https?:\/\/(www\.)?codechef\.com\/users\/[a-zA-Z0-9_-]+\/?$"
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
-
-            </div>
-
-            <div>
+              <div>
                 <label
                   htmlFor="resume"
                   className="block text-sm font-medium text-gray-300"
@@ -499,17 +494,20 @@ function Form() {
                   type="url"
                   name="resume"
                   id="resume"
-                  required
+                  // required
                   value={formData.resume}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
                   placeholder="https://drive.google.com/file/d/yourfileid/view"
-                  pattern="^https?:\/\/(drive\.google\.com)\/.*$"
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
 
-              <div className="pt-5 flex items-center">
+            </div>
+
+            
+
+              <div className="pt-2 flex items-center">
                 <input
                   type="checkbox"
                   name="membercheck"
@@ -538,15 +536,18 @@ function Form() {
                     type="text"
                     name="membershipNumber"
                     id="membershipNumber"
-                    required
+                    // required
                     value={formData.membershipNumber}
                     disabled={localStorage.getItem("ViewForm") === "true"}
                     onChange={handleChange}
-                    maxLength={10}
+                    maxLength={7}
+                    placeholder="1234567"
                     className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                   />
                 </div>
               )}
+
+            <hr className=" border-white/50"/>
 
             
             <div>
