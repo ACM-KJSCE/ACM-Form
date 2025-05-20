@@ -167,6 +167,8 @@ function Preview() {
                   {formData.codechefProfile}
                 </a>
               </div>
+            </div>
+
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Resume Link
@@ -180,6 +182,12 @@ function Preview() {
                   {formData.resume}
                 </a>
               </div>
+
+             <div>
+                <span className="block text-sm font-medium text-gray-300">
+                  Membership Number
+                </span>
+                <span className="block mt-1 text-white">{formData.membershipNumber}</span>
             </div>
 
             <div>

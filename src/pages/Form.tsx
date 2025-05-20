@@ -421,6 +421,7 @@ function Form() {
                   type="tel"
                   name="cgpa"
                   id="cgpa"
+                  placeholder="8.79"
                   // required
                   value={formData.cgpa}
                   disabled={localStorage.getItem("ViewForm") === "true"}
@@ -441,6 +442,7 @@ function Form() {
                   type="tel"
                   name="phoneNumber"
                   id="phoneNumber"
+                  placeholder="9876543210"
                   // required
                   value={formData.phoneNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
@@ -482,7 +484,8 @@ function Form() {
                   type="url"
                   name="linkedinProfile"
                   id="linkedinProfile"
-                  required
+                  placeholder="https://www.linkedin.com/in/yourusername"
+                  //required
                   value={formData.linkedinProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
@@ -509,6 +512,8 @@ function Form() {
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
+            </div>
+
               <div>
                 <label
                   htmlFor="resume"
@@ -528,10 +533,6 @@ function Form() {
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
                 />
               </div>
-
-            </div>
-
-
 
               <div className="pt-2 flex items-center">
                 <input
