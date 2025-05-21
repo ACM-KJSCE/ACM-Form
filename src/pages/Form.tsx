@@ -516,7 +516,7 @@ function Form() {
                 htmlFor="resume"
                 className="block text-sm font-medium text-gray-300"
               >
-                Resume Link<text className="text-red-600">*</text>
+                Resume Link (Anyone with the link) <text className="text-red-600">*</text>
               </label>
               <input
                 type="url"
