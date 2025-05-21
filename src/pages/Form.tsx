@@ -43,7 +43,6 @@ function Form() {
     "Technical Team",
     "Creative Team",
     "Marketing Team",
-    "Public Relations Team",
     "Operations Team",
   ];
 
@@ -55,7 +54,6 @@ function Form() {
     "Technical Head",
     "Creative Head",
     "Marketing Head",
-    "Public Relations Head",
     "Operations Head",
   ];
 
