@@ -375,7 +375,7 @@ function Form() {
                   htmlFor="year"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Year<text className="text-red-600">*</text>
+                  Year (as of 25-26)<text className="text-red-600">*</text>
                 </label>
                 <select
                   name="year"
