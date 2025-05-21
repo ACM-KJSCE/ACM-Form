@@ -15,7 +15,7 @@ function Form() {
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { allFilled, regexProper, hasAtLeast30Words } = useCheck();
+  const {validateField,validateForm } = useCheck();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -35,7 +35,9 @@ function Form() {
   });
   const [fetching, setFetching] = useState(true);
   const [hasMembership, setHasMembership] = useState<boolean>(!!formData.membershipNumber);
-
+  
+  const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const roleSY: string[] = [
     "Technical Team",
@@ -129,6 +131,8 @@ function Form() {
     return () => clearTimeout(timeoutId);
   }, [formData]);
 
+  
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -137,23 +141,43 @@ function Form() {
     if (localStorage.getItem("ViewForm") === "true") {
       return;
     }
-    const { name, value, type} = e.target;
+    
+    const { name, value, type } = e.target;
+    
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+    
     if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
 
-    if (name === "membercheck") {
-      setHasMembership(checked);
-      setFormData((prev) => ({
-        ...prev,
-        membershipNumber: checked ? prev.membershipNumber : "",
-      }));
-    }
+      if (name === "membercheck") {
+        setHasMembership(checked);
+        setFormData((prev) => ({
+          ...prev,
+          membershipNumber: checked ? prev.membershipNumber : "",
+        }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
+      
+      validateField(name, value, setValidationErrors, hasMembership);
     }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+
+    validateField(name, value, setValidationErrors, hasMembership);
   };
 
   const handleLogout = async () => {
@@ -181,70 +205,8 @@ function Form() {
     setError(null);
 
     try {
-      if (!allFilled(formData,hasMembership) ) {
-        showToast("Please fill all the fields", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.rollNumber, "roll") === false) {
-        showToast("Please enter a valid roll number", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.phoneNumber, "phone") === false) {
-        showToast("Please enter a valid phone number", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.githubProfile, "github") === false) {
-        showToast("Please enter a valid GitHub profile link", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.linkedinProfile, "linkedin") === false) {
-        showToast("Please enter a valid LinkedIn profile link", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.codechefProfile, "codechef") === false) {
-        showToast("Please enter a valid Codechef profile link", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.resume, "resume") === false) {
-        showToast("Please enter a valid Resume link", "error");
-        setLoading(false);
-        return;
-      }
-      if (hasAtLeast30Words(formData.whyACM) === false) {
-        showToast("Answer must be at least 30 words.", "error");
-        setLoading(false);
-        return;
-      }
-
-      if(hasMembership && regexProper(formData.membershipNumber, "acmID") === false) {
-        showToast("Please enter a valid ACM Membership Number", "error");
-        setLoading(false);
-        return;
-      }
-
-      if (!formData.role && !formData.role2) {
-        showToast("Please select at least one role", "error");
-        setLoading(false);
-        return;
-      }
-      if (formData.role === formData.role2) {
-        showToast("Please select different roles", "error");
-        setLoading(false);
-        return;
-      }
-      if (hasMembership && formData.membershipNumber.trim() === "") {
-        showToast("Please enter your ACM Membership Number", "error");
-        setLoading(false);
-        return;
-      }
-      if (regexProper(formData.cgpa, "cg") === false) {
-        showToast("Please enter a valid CGPA", "error");
+      if (!validateForm(formData, setTouched, hasMembership, setValidationErrors)) {
+        showToast("Please correct all errors before submitting.", "error");
         setLoading(false);
         return;
       }
@@ -271,15 +233,31 @@ function Form() {
       setLoading(false);
     }
   };
+  
+  const getInputClasses = (fieldName: string) => {
+    const isViewOnly = localStorage.getItem("ViewForm") === "true";
+    const isInvalid = touched[fieldName] && validationErrors[fieldName];
+    const isEmpty = touched[fieldName] && !formData[fieldName as keyof FormData];
+    
+    let baseClasses = "p-2 mt-1 block w-full rounded-lg shadow-sm transition-colors ";
+    
+    if (isViewOnly) {
+      return baseClasses + "bg-gray-800/50 border-gray-700 text-gray-400 cursor-not-allowed";
+    } else if (isInvalid) {
+      return baseClasses + "bg-gray-800/50 border-2 border-red-500 text-white focus:ring-red-400";
+    } else if (isEmpty) {
+      return baseClasses + "bg-gray-800/50 border-2 border-yellow-500 text-white focus:border-blue-500 focus:ring-blue-500";
+    } else {
+      return baseClasses + "bg-gray-800/50 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500";
+    }
+  };
 
   if (fetching) {
-    return (
-      <Loader/>
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="bg-black/30 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 p-8">
           <div className="text-center mb-8">
@@ -310,7 +288,6 @@ function Form() {
                   type="text"
                   name="fullName"
                   id="fullName"
-                  // required
                   value={formData.fullName}
                   disabled
                   className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-gray-400 shadow-sm cursor-not-allowed"
@@ -328,10 +305,9 @@ function Form() {
                   type="email"
                   name="email"
                   id="email"
-                  // required
                   value={formData.email}
                   disabled
-                  className=" p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-gray-400 shadow-sm cursor-not-allowed"
+                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-gray-400 shadow-sm cursor-not-allowed"
                 />
               </div>
 
@@ -346,14 +322,17 @@ function Form() {
                   type="text"
                   name="rollNumber"
                   id="rollNumber"
-                  // required
                   value={formData.rollNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   maxLength={11}
                   placeholder="Enter your roll number"
-                  className=" p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className={getInputClasses("rollNumber")}
                 />
+                {touched.rollNumber && validationErrors.rollNumber && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid roll number</p>
+                )}
               </div>
 
               <div>
@@ -366,11 +345,11 @@ function Form() {
                 <select
                   name="branch"
                   id="branch"
-                  // required
                   value={formData.branch}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  onBlur={handleBlur}
+                  className={getInputClasses("branch")}
                 >
                   <option value="">Select Branch</option>
                   <option>Computer Engineering</option>
@@ -386,6 +365,9 @@ function Form() {
                   <option>Robotics & Artificial Intelligence</option>
                   <option>Artificial Intelligence & Data Science</option>
                 </select>
+                {touched.branch && validationErrors.branch && (
+                  <p className="mt-1 text-sm text-red-500">Please select a branch</p>
+                )}
               </div>
 
               <div>
@@ -398,19 +380,22 @@ function Form() {
                 <select
                   name="year"
                   id="year"
-                  // required
                   value={formData.year}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  onBlur={handleBlur}
+                  className={getInputClasses("year")}
                 >
                   <option value="">Select Year</option>
                   <option value="2">Second Year</option>
                   <option value="3">Third Year</option>
                 </select>
+                {touched.year && validationErrors.year && (
+                  <p className="mt-1 text-sm text-red-500">Please select your year</p>
+                )}
               </div>
 
-            <div>
+              <div>
                 <label
                   htmlFor="cgpa"
                   className="block text-sm font-medium text-gray-300"
@@ -422,13 +407,16 @@ function Form() {
                   name="cgpa"
                   id="cgpa"
                   placeholder="8.79"
-                  // required
                   value={formData.cgpa}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   maxLength={10}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className={getInputClasses("cgpa")}
                 />
+                {touched.cgpa && validationErrors.cgpa && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid CGPA</p>
+                )}
               </div>
 
               <div>
@@ -443,15 +431,17 @@ function Form() {
                   name="phoneNumber"
                   id="phoneNumber"
                   placeholder="9876543210"
-                  // required
                   value={formData.phoneNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   maxLength={10}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className={getInputClasses("phoneNumber")}
                 />
+                {touched.phoneNumber && validationErrors.phoneNumber && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid 10-digit phone number</p>
+                )}
               </div>
-
 
               <div>
                 <label
@@ -464,13 +454,16 @@ function Form() {
                   type="url"
                   name="githubProfile"
                   id="githubProfile"
-                  // required
                   value={formData.githubProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="https://github.com/yourusername"
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className={getInputClasses("githubProfile")}
                 />
+                {touched.githubProfile && validationErrors.githubProfile && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid GitHub URL</p>
+                )}
               </div>
 
               <div>
@@ -485,12 +478,15 @@ function Form() {
                   name="linkedinProfile"
                   id="linkedinProfile"
                   placeholder="https://www.linkedin.com/in/yourusername"
-                  //required
                   value={formData.linkedinProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  onBlur={handleBlur}
+                  className={getInputClasses("linkedinProfile")}
                 />
+                {touched.linkedinProfile && validationErrors.linkedinProfile && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid LinkedIn URL</p>
+                )}
               </div>
 
               <div>
@@ -504,78 +500,86 @@ function Form() {
                   type="url"
                   name="codechefProfile"
                   id="codechefProfile"
-                  // required
                   value={formData.codechefProfile}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="https://www.codechef.com/users/yourusername"
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  className={getInputClasses("codechefProfile")}
                 />
+                {touched.codechefProfile && validationErrors.codechefProfile && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid Codechef URL</p>
+                )}
               </div>
             </div>
 
-              <div>
+            <div>
+              <label
+                htmlFor="resume"
+                className="block text-sm font-medium text-gray-300"
+              >
+                Resume Link<text className="text-red-600">*</text>
+              </label>
+              <input
+                type="url"
+                name="resume"
+                id="resume"
+                value={formData.resume}
+                disabled={localStorage.getItem("ViewForm") === "true"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="https://drive.google.com/file/d/yourfileid/view"
+                className={getInputClasses("resume")}
+              />
+              {touched.resume && validationErrors.resume && (
+                <p className="mt-1 text-sm text-red-500">Please enter a valid resume URL</p>
+              )}
+            </div>
+
+            <div className="pt-2 flex items-center">
+              <input
+                type="checkbox"
+                name="membercheck"
+                id="memberCheck"
+                checked={hasMembership}
+                onChange={handleChange}
+                className="h-5 w-5 text-blue-600 bg-gray-800/50 border-gray-700 rounded focus:ring-blue-500 transition-colors"
+              />
+              <label
+                htmlFor="memberCheck"
+                className="text-sm font-medium text-gray-300 pl-3"
+              >
+                Do you have an ACM membership?
+              </label>
+            </div>
+
+            {hasMembership && (
+              <div className="mt-4">
                 <label
-                  htmlFor="resume"
+                  htmlFor="membershipNumber"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Resume Link<text className="text-red-600">*</text>
+                  Membership Number<span className="text-red-600"> *</span>
                 </label>
                 <input
-                  type="url"
-                  name="resume"
-                  id="resume"
-                  // required
-                  value={formData.resume}
+                  type="text"
+                  name="membershipNumber"
+                  id="membershipNumber"
+                  value={formData.membershipNumber}
                   disabled={localStorage.getItem("ViewForm") === "true"}
                   onChange={handleChange}
-                  placeholder="https://drive.google.com/file/d/yourfileid/view"
-                  className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                  onBlur={handleBlur}
+                  maxLength={7}
+                  placeholder="1234567"
+                  className={getInputClasses("membershipNumber")}
                 />
+                {touched.membershipNumber && validationErrors.membershipNumber && (
+                  <p className="mt-1 text-sm text-red-500">Please enter a valid membership number</p>
+                )}
               </div>
+            )}
 
-              <div className="pt-2 flex items-center">
-                <input
-                  type="checkbox"
-                  name="membercheck"
-                  id="memberCheck"
-                  checked={hasMembership}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-blue-600 bg-gray-800/50 border-gray-700 rounded focus:ring-blue-500 transition-colors"
-                />
-                <label
-                  htmlFor="memberCheck"
-                  className="text-sm font-medium text-gray-300 pl-3"
-                >
-                  Do you have an ACM membership?
-                </label>
-              </div>
-
-              {hasMembership && (
-                <div className="mt-4">
-                  <label
-                    htmlFor="membershipNumber"
-                    className="block text-sm font-medium text-gray-300"
-                  >
-                    Membership Number<span className="text-red-600"> *</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="membershipNumber"
-                    id="membershipNumber"
-                    // required
-                    value={formData.membershipNumber}
-                    disabled={localStorage.getItem("ViewForm") === "true"}
-                    onChange={handleChange}
-                    maxLength={7}
-                    placeholder="1234567"
-                    className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                  />
-                </div>
-              )}
-
-            <hr className=" border-white/50"/>
-
+            <hr className="border-white/50" />
 
             <div>
               <label
@@ -587,14 +591,14 @@ function Form() {
               <select
                 name="role"
                 id="role"
-                // required
                 value={formData.role}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 disabled={
                   !formData.year || localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your first role preference"
-                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role")}`}
               >
                 <option value="">Select Role </option>
                 {formData.year === "2"
@@ -609,6 +613,13 @@ function Form() {
                       </option>
                     ))}
               </select>
+              {touched.role && validationErrors.role && (
+                <p className="mt-1 text-sm text-red-500">
+                  {formData.role === formData.role2 && formData.role ? 
+                    "First and second choices must be different" : 
+                    "Please select a role"}
+                </p>
+              )}
             </div>
 
             <div>
@@ -623,11 +634,12 @@ function Form() {
                 id="role2"
                 value={formData.role2}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 disabled={
                   !formData.year || localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your second role preference"
-                className="p-2 mt-1 block disabled:opacity-50 disabled:cursor-not-allowed w-full rounded-lg bg-gray-800/80 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role2")}`}
               >
                 <option value="">Select Role </option>
                 {formData.year === "2"
@@ -642,6 +654,13 @@ function Form() {
                       </option>
                     ))}
               </select>
+              {touched.role2 && validationErrors.role2 && (
+                <p className="mt-1 text-sm text-red-500">
+                  {formData.role === formData.role2 && formData.role2 ? 
+                    "First and second choices must be different" : 
+                    "Please select a second role"}
+                </p>
+              )}
             </div>
 
             <div>
@@ -656,12 +675,15 @@ function Form() {
                 name="whyACM"
                 id="whyACM"
                 rows={3}
-                // required
                 value={formData.whyACM}
                 disabled={localStorage.getItem("ViewForm") === "true"}
                 onChange={handleChange}
-                className="p-2 mt-1 block w-full rounded-lg bg-gray-800/50 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                onBlur={handleBlur}
+                className={getInputClasses("whyACM")}
               />
+              {touched.whyACM && validationErrors.whyACM && (
+                <p className="mt-1 text-sm text-red-500">Please write at least 30 words</p>
+              )}
             </div>
 
             <div className="flex justify-end space-x-4 pt-4">
