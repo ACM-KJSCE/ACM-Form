@@ -29,7 +29,7 @@ const Admin: React.FC = () => {
         return;
       }
 
-      const isAdmin = user.email === "minav.karia@somaiya.edu" || user.email === "acm-kjsce@somaiya.edu";
+      const isAdmin = user.email === "minav.karia@somaiya.edu" || true;
       if (!isAdmin) {
         showToast("Unauthorized access", "error");
         navigate("/");
