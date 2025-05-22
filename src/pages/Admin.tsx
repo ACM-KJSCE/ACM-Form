@@ -11,6 +11,7 @@ const Admin: React.FC = () => {
   const [applications, setApplications] = useState<FormData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSubmittedOnly, setShowSubmittedOnly] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -60,7 +61,35 @@ const Admin: React.FC = () => {
 
   const downloadExcel = () => {
     try {
-      const worksheet = XLSX.utils.json_to_sheet(applications);
+
+      const columnOrder = [
+        "fullName",
+        "email",
+        "rollNumber",
+        "branch",
+        "year",
+        "cgpa",
+        "phoneNumber",
+        "githubProfile",
+        "linkedinProfile",
+        "codechefProfile",
+        "resume",
+        "membershipNumber",
+        "role",
+        "role2",
+        "whyACM",
+        "submitted",
+        "submittedAt",
+      ];
+
+      const orderedApplications = applications.map((app) => {
+        const ordered: any = {};
+        columnOrder.forEach((key) => {
+          ordered[key] = app[key as keyof typeof app] ?? "";
+        });
+        return ordered;
+      });
+      const worksheet = XLSX.utils.json_to_sheet(orderedApplications);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
       XLSX.writeFile(workbook, "acm_applications.xlsx");
@@ -73,6 +102,10 @@ const Admin: React.FC = () => {
       showToast(errorMessage, "error");
     }
   };
+
+  const displayedApplications = showSubmittedOnly
+    ? applications.filter((app) => app.submitted)
+    : applications;
 
   if (loading) {
     return (
@@ -97,15 +130,26 @@ const Admin: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">ACM Applications</h1>
-          <button
-            onClick={downloadExcel}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            Download Excel
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={downloadExcel}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              Download Excel
+            </button>
+            <button
+              onClick={() => setShowSubmittedOnly((prev) => !prev)}
+              className={`px-4 py-2 rounded-lg transition-colors border border-blue-600 ${
+                showSubmittedOnly
+                  ? "bg-blue-700 text-white"
+                  : "bg-gray-800 text-blue-400 hover:bg-blue-900/30"
+              }`}
+            >
+              {showSubmittedOnly ? "Show All" : "Show Submitted Only"}
+            </button>
+          </div>
         </div>
 
-        {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm">Total Applications</h3>
@@ -143,7 +187,7 @@ const Admin: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {applications.map((app, index) => (
+              {displayedApplications.map((app, index) => (
                 <tr
                   key={index}
                   className="border-b border-gray-700 hover:bg-gray-800/50"
