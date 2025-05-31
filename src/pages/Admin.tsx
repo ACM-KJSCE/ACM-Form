@@ -103,9 +103,16 @@ const Admin: React.FC = () => {
     }
   };
 
-  const displayedApplications = showSubmittedOnly
+  const displayedApplications = (showSubmittedOnly
     ? applications.filter((app) => app.submitted)
-    : applications;
+    : applications
+  ).sort((a, b) => {
+    if (!a.submittedAt) return 1;
+    if (!b.submittedAt) return -1;
+    return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
+  });
+
+  console.log(displayedApplications)
 
   if (loading) {
     return (
@@ -177,13 +184,14 @@ const Admin: React.FC = () => {
               <tr className="bg-gray-800">
                 <th className="p-4 text-left">Name</th>
                 <th className="p-4 text-left">Email</th>
-                <th className="p-4 text-left">Roll Number</th>
+                {/* <th className="p-4 text-left">Roll Number</th> */}
                 <th className="p-4 text-left">Branch</th>
                 <th className="p-4 text-left">Year</th>
                 <th className="p-4 text-left">Phone</th>
                 <th className="p-4 text-left">Role</th>
                 <th className="p-4 text-left">Role 2</th>
                 <th className="p-4 text-left">Status</th>
+                <th className="p-4 text-left">Submitted At</th>
               </tr>
             </thead>
             <tbody>
@@ -194,7 +202,7 @@ const Admin: React.FC = () => {
                 >
                   <td className="p-4">{app.fullName}</td>
                   <td className="p-4">{app.email}</td>
-                  <td className="p-4">{app.rollNumber}</td>
+                  {/* <td className="p-4">{app.rollNumber}</td> */}
                   <td className="p-4">{app.branch}</td>
                   <td className="p-4">{app.year}</td>
                   <td className="p-4">{app.phoneNumber}</td>
@@ -210,6 +218,11 @@ const Admin: React.FC = () => {
                         Draft
                       </span>
                     )}
+                  </td>
+                  <td className="p-4">
+                    {app.submittedAt
+                      ? new Date(app.submittedAt).toLocaleString()
+                      : "N/A"}
                   </td>
                 </tr>
               ))}
