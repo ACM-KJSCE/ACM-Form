@@ -70,7 +70,7 @@ const validateField = (name: string, value: string, setValidationErrors:Function
       const requiredFields = [
         "rollNumber", "branch", "year", "phoneNumber", 
         "githubProfile", "linkedinProfile", "codechefProfile", 
-        "resume", "whyACM", "cgpa", "role"
+        "resume", "whyACM", "cgpa", "role", "role2"
       ];
       
       if (hasMembership) {

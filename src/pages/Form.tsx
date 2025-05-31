@@ -63,6 +63,12 @@ function Form() {
       role: "",
       role2: "",
     }));
+
+    setValidationErrors((prev) => ({
+      ...prev,
+      role: false,
+      role2: false,
+    }));
   },[formData.year]);
 
   useEffect(() => {
