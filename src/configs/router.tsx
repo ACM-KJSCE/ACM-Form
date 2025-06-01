@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from '../pages/Login'
-import Form from "../pages/Form";
+// import Form from "../pages/Form";
 import Thankyou from "../pages/Thankyou";
 import Admin from "../pages/Admin";
 import Preview from "../pages/Preview";
+import Formclosed from "../pages/Formclosed";
 
 const router = createBrowserRouter([
     {
@@ -15,13 +16,21 @@ const router = createBrowserRouter([
         )
     },
     {
-        path: '/form',
+        path: '/formclosed',
         element: (
             <>
-                <Form/>
-            </>
+                <Formclosed/>
+            </> 
         )
     },
+    // {
+    //     path: '/form',
+    //     element: (
+    //         <>
+    //             <Form/>
+    //         </>
+    //     )
+    // },
     {
         path:"/success",
         element: (
