@@ -30,11 +30,9 @@ function Form() {
     whyACM: "",
     role: "",
     role2: "",
-    membershipNumber: "",
-    cgpa: "",
+    cgpa: ""
   });
   const [fetching, setFetching] = useState(true);
-  const [hasMembership, setHasMembership] = useState<boolean>(!!formData.membershipNumber);
   
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -146,31 +144,18 @@ function Form() {
       return;
     }
     
-    const { name, value, type } = e.target;
+    const { name, value, } = e.target;
     
     setTouched(prev => ({
       ...prev,
       [name]: true
     }));
     
-    if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;
-
-      if (name === "membercheck") {
-        setHasMembership(checked);
-        setFormData((prev) => ({
-          ...prev,
-          membershipNumber: checked ? prev.membershipNumber : "",
-        }));
-      }
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-      
-      validateField(name, value, setValidationErrors, hasMembership);
-    }
+  
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -181,7 +166,7 @@ function Form() {
       [name]: true
     }));
 
-    validateField(name, value, setValidationErrors, hasMembership);
+    validateField(name, value, setValidationErrors);
   };
 
   const handleLogout = async () => {
@@ -209,7 +194,7 @@ function Form() {
     setError(null);
 
     try {
-      if (!validateForm(formData, setTouched, hasMembership, setValidationErrors)) {
+      if (!validateForm(formData, setTouched, setValidationErrors)) {
         showToast("Please correct all errors before submitting.", "error");
         setLoading(false);
         return;
@@ -539,51 +524,6 @@ function Form() {
                 <p className="mt-1 text-sm text-red-500">Please enter a valid resume URL</p>
               )}
             </div>
-
-            <div className="pt-2 flex items-center">
-              <input
-                type="checkbox"
-                name="membercheck"
-                id="memberCheck"
-                checked={hasMembership}
-                onChange={handleChange}
-                className="h-5 w-5 text-blue-600 bg-gray-800/50 border-gray-700 rounded focus:ring-blue-500 transition-colors"
-              />
-              <label
-                htmlFor="memberCheck"
-                className="text-sm font-medium text-gray-300 pl-3"
-              >
-                Do you have an ACM membership?
-              </label>
-            </div>
-
-            {hasMembership && (
-              <div className="mt-4">
-                <label
-                  htmlFor="membershipNumber"
-                  className="block text-sm font-medium text-gray-300"
-                >
-                  Membership Number<span className="text-red-600"> *</span>
-                </label>
-                <input
-                  type="text"
-                  name="membershipNumber"
-                  id="membershipNumber"
-                  value={formData.membershipNumber}
-                  disabled={localStorage.getItem("ViewForm") === "true"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  maxLength={7}
-                  placeholder="1234567"
-                  className={getInputClasses("membershipNumber")}
-                />
-                {touched.membershipNumber && validationErrors.membershipNumber && (
-                  <p className="mt-1 text-sm text-red-500">Please enter a valid membership number</p>
-                )}
-              </div>
-            )}
-
-            <hr className="border-white/50" />
 
             <div>
               <label

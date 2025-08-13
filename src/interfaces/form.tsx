@@ -14,7 +14,6 @@ interface FormData {
   role2: string;
   submitted?: boolean;
   submittedAt?: string;
-  membershipNumber: string;
   cgpa: string;
 }
 

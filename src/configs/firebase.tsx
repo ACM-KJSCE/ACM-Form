@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCm-Q5wJnaj4-m9ZZ6jzpQAJ_flUFmsJfk",
-    authDomain: "acm-form-24dc7.firebaseapp.com",
-    projectId: "acm-form-24dc7",
-    storageBucket: "acm-form-24dc7.firebasestorage.app",
-    messagingSenderId: "918528647383",
-    appId: "1:918528647383:web:2064eb9086f25d60915092",
-    measurementId: "G-NSBG9W716V"
+    apiKey: "AIzaSyCQlczzqpx9P7rNE_T8PDbg54k1mSwpOhc",
+    authDomain: "fy-form-acm.firebaseapp.com",
+    projectId: "fy-form-acm",
+    storageBucket: "fy-form-acm.firebasestorage.app",
+    messagingSenderId: "317471656724",
+    appId: "1:317471656724:web:00def56b5529155ac19001",
+    measurementId: "G-PBNYL2WST1"
   };
 
 const app = initializeApp(firebaseConfig);

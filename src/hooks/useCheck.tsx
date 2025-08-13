@@ -10,7 +10,7 @@ import { FormData } from "../interfaces/form";
 //   return values.every(([_, value]) => value.trim() !== "");
 // };
 
-const validateField = (name: string, value: string, setValidationErrors:Function,hasMembership:boolean) => {
+const validateField = (name: string, value: string, setValidationErrors:Function) => {
   
     let isValid = true;
     
@@ -39,9 +39,6 @@ const validateField = (name: string, value: string, setValidationErrors:Function
         case "whyACM":
           isValid = hasAtLeast30Words(value);
           break;
-        case "membershipNumber":
-          isValid = hasMembership ? regexProper(value, "acmID") : true;
-          break;
         case "cgpa":
           isValid = regexProper(value, "cg");
           break;
@@ -57,7 +54,7 @@ const validateField = (name: string, value: string, setValidationErrors:Function
   };
 
 
-  const validateForm = (formData: FormData, setTouched:React.Dispatch<React.SetStateAction<Record<string, boolean>>>, hasMembership:boolean,setValidationErrors:React.Dispatch<React.SetStateAction<Record<string, boolean>>>) => {
+  const validateForm = (formData: FormData, setTouched:React.Dispatch<React.SetStateAction<Record<string, boolean>>>, setValidationErrors:React.Dispatch<React.SetStateAction<Record<string, boolean>>>) => {
       const errors: Record<string, boolean> = {};
       let isValid = true;
       
@@ -72,10 +69,6 @@ const validateField = (name: string, value: string, setValidationErrors:Function
         "githubProfile", "linkedinProfile", "codechefProfile", 
         "resume", "whyACM", "cgpa", "role", "role2"
       ];
-      
-      if (hasMembership) {
-        requiredFields.push("membershipNumber");
-      }
       
       for (const field of requiredFields) {
         let fieldIsValid = true;
@@ -104,9 +97,6 @@ const validateField = (name: string, value: string, setValidationErrors:Function
               break;
             case "whyACM":
               fieldIsValid = hasAtLeast30Words(formData.whyACM);
-              break;
-            case "membershipNumber":
-              fieldIsValid = hasMembership ? regexProper(formData.membershipNumber, "acmID") : true;
               break;
             case "cgpa":
               fieldIsValid = regexProper(formData.cgpa, "cg");

@@ -183,13 +183,6 @@ function Preview() {
                 </a>
               </div>
 
-             <div>
-                <span className="block text-sm font-medium text-gray-300">
-                  Membership Number
-                </span>
-                <span className="block mt-1 text-white">{formData.membershipNumber}</span>
-            </div>
-
             <div>
               <span className="block text-sm font-medium text-gray-300">
                 Role Choice 1
