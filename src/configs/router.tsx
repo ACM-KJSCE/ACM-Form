@@ -24,14 +24,14 @@ const router = createBrowserRouter([
             </> 
         )
     },
-    // {
-    //     path: '/form',
-    //     element: (
-    //         <>
-    //             <Form/>
-    //         </>
-    //     )
-    // },
+    {
+        path: '/form',
+        element: (
+            <>
+                <Form/>
+            </>
+        )
+    },
     {
         path:"/success",
         element: (

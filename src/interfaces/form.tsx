@@ -3,7 +3,6 @@ interface FormData {
   email: string;
   rollNumber: string;
   branch: string;
-  year: string;
   phoneNumber: string;
   githubProfile: string;
   linkedinProfile: string;

@@ -65,7 +65,7 @@ const validateField = (name: string, value: string, setValidationErrors:Function
       setTouched(allTouched);
       
       const requiredFields = [
-        "rollNumber", "branch", "year", "phoneNumber", 
+        "rollNumber", "branch", "phoneNumber", 
         "githubProfile", "linkedinProfile", "codechefProfile", 
         "resume", "whyACM", "cgpa", "role", "role2"
       ];

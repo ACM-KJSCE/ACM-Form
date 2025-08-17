@@ -21,7 +21,6 @@ function Form() {
     email: "",
     rollNumber: "",
     branch: "",
-    year: "",
     phoneNumber: "",
     githubProfile: "",
     linkedinProfile: "",
@@ -37,23 +36,23 @@ function Form() {
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const roleSY: string[] = [
+  const roleFY: string[] = [
     "Technical Team",
     "Creative Team",
     "Marketing Team",
     "Operations Team",
   ];
 
-  const roleTY: string[] = [
-    "Chairperson",
-    "Vice Chairperson",
-    "Secretary",
-    "Treasurer",
-    "Technical Head",
-    "Creative Head",
-    "Marketing Head",
-    "Operations Head",
-  ];
+  // const roleTY: string[] = [
+  //   "Chairperson",
+  //   "Vice Chairperson",
+  //   "Secretary",
+  //   "Treasurer",
+  //   "Technical Head",
+  //   "Creative Head",
+  //   "Marketing Head",
+  //   "Operations Head",
+  // ];
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -67,7 +66,7 @@ function Form() {
       role: false,
       role2: false,
     }));
-  },[formData.year]);
+  },[]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -359,7 +358,7 @@ function Form() {
                 )}
               </div>
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="year"
                   className="block text-sm font-medium text-gray-300"
@@ -382,7 +381,7 @@ function Form() {
                 {touched.year && validationErrors.year && (
                   <p className="mt-1 text-sm text-red-500">Please select your year</p>
                 )}
-              </div>
+              </div> */}
 
               <div>
                 <label
@@ -539,23 +538,17 @@ function Form() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled={
-                  !formData.year || localStorage.getItem("ViewForm") === "true"
+                  localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your first role preference"
                 className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role")}`}
               >
                 <option value="">Select Role </option>
-                {formData.year === "2"
-                  ? roleSY.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))
-                  : roleTY.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
+                {roleFY.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
               </select>
               {touched.role && validationErrors.role && (
                 <p className="mt-1 text-sm text-red-500">
@@ -580,23 +573,17 @@ function Form() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled={
-                  !formData.year || localStorage.getItem("ViewForm") === "true"
+                  localStorage.getItem("ViewForm") === "true"
                 }
                 aria-label="Select your second role preference"
                 className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role2")}`}
               >
                 <option value="">Select Role </option>
-                {formData.year === "2"
-                  ? roleSY.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))
-                  : roleTY.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
+                {roleFY.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
               </select>
               {touched.role2 && validationErrors.role2 && (
                 <p className="mt-1 text-sm text-red-500">

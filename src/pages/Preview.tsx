@@ -108,14 +108,14 @@ function Preview() {
                 </span>
                 <span className="block mt-1 text-white">{formData.branch}</span>
               </div>
-              <div>
+              {/* <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Year
                 </span>
                 <span className="block mt-1 text-white">
                   {formData.year === "2" ? "Second Year" : formData.year === "3" ? "Third Year" : formData.year}
                 </span>
-              </div>
+              </div> */}
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   CGPA

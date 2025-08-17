@@ -18,9 +18,7 @@ const Admin: React.FC = () => {
 
   const stats = {
     total: applications.length,
-    submitted: applications.filter((app) => app.submitted).length,
-    secondYear: applications.filter((app) => app.year === "2").length,
-    thirdYear: applications.filter((app) => app.year === "3").length,
+    submitted: applications.filter((app) => app.submitted).length
   };
 
   useEffect(() => {
@@ -67,14 +65,12 @@ const Admin: React.FC = () => {
         "email",
         "rollNumber",
         "branch",
-        "year",
         "cgpa",
         "phoneNumber",
         "githubProfile",
         "linkedinProfile",
         "codechefProfile",
         "resume",
-        "membershipNumber",
         "role",
         "role2",
         "whyACM",
@@ -168,14 +164,14 @@ const Admin: React.FC = () => {
               {stats.submitted}
             </p>
           </div>
-          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+          {/* <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm">Second Year</h3>
             <p className="text-2xl font-bold">{stats.secondYear}</p>
           </div>
           <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm">Third Year</h3>
             <p className="text-2xl font-bold">{stats.thirdYear}</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="overflow-x-auto">
@@ -186,7 +182,7 @@ const Admin: React.FC = () => {
                 <th className="p-4 text-left">Email</th>
                 {/* <th className="p-4 text-left">Roll Number</th> */}
                 <th className="p-4 text-left">Branch</th>
-                <th className="p-4 text-left">Year</th>
+                {/* <th className="p-4 text-left">Year</th> */}
                 <th className="p-4 text-left">Phone</th>
                 <th className="p-4 text-left">Role</th>
                 <th className="p-4 text-left">Role 2</th>
@@ -204,7 +200,7 @@ const Admin: React.FC = () => {
                   <td className="p-4">{app.email}</td>
                   {/* <td className="p-4">{app.rollNumber}</td> */}
                   <td className="p-4">{app.branch}</td>
-                  <td className="p-4">{app.year}</td>
+                  {/* <td className="p-4">{app.year}</td> */}
                   <td className="p-4">{app.phoneNumber}</td>
                   <td className="p-4">{app.role}</td>
                   <td className="p-4">{app.role2}</td>
