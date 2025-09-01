@@ -13,7 +13,6 @@ interface FormData {
   role2: string;
   submitted?: boolean;
   submittedAt?: string;
-  cgpa: string;
 }
 
 export type {FormData}

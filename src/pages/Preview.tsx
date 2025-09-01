@@ -116,12 +116,12 @@ function Preview() {
                   {formData.year === "2" ? "Second Year" : formData.year === "3" ? "Third Year" : formData.year}
                 </span>
               </div> */}
-              <div>
+              {/* <div>
                 <span className="block text-sm font-medium text-gray-300">
                   CGPA
                 </span>
                 <span className="block mt-1 text-white">{formData.cgpa}</span>
-              </div>
+              </div> */}
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Phone Number

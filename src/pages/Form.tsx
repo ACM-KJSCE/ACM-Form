@@ -28,8 +28,7 @@ function Form() {
     resume: "",
     whyACM: "",
     role: "",
-    role2: "",
-    cgpa: ""
+    role2: ""
   });
   const [fetching, setFetching] = useState(true);
   
@@ -383,7 +382,7 @@ function Form() {
                 )}
               </div> */}
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="cgpa"
                   className="block text-sm font-medium text-gray-300"
@@ -405,7 +404,7 @@ function Form() {
                 {touched.cgpa && validationErrors.cgpa && (
                   <p className="mt-1 text-sm text-red-500">Please enter a valid CGPA</p>
                 )}
-              </div>
+              </div> */}
 
               <div>
                 <label
@@ -436,7 +435,7 @@ function Form() {
                   htmlFor="githubProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  GitHub Profile<text className="text-red-600">*</text>
+                  GitHub Profile
                 </label>
                 <input
                   type="url"
@@ -459,7 +458,7 @@ function Form() {
                   htmlFor="linkedinProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  LinkedIn Profile<text className="text-red-600">*</text>
+                  LinkedIn Profile
                 </label>
                 <input
                   type="url"
@@ -482,7 +481,7 @@ function Form() {
                   htmlFor="codechefProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Codechef Profile<text className="text-red-600">*</text>
+                  Codechef Profile
                 </label>
                 <input
                   type="url"

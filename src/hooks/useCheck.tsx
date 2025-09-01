@@ -66,8 +66,8 @@ const validateField = (name: string, value: string, setValidationErrors:Function
       
       const requiredFields = [
         "rollNumber", "branch", "phoneNumber", 
-        "githubProfile", "linkedinProfile", "codechefProfile", 
-        "resume", "whyACM", "cgpa", "role", "role2"
+        // "githubProfile", "linkedinProfile", "codechefProfile", 
+        "resume", "whyACM", "role", "role2"
       ];
       
       for (const field of requiredFields) {
@@ -98,9 +98,9 @@ const validateField = (name: string, value: string, setValidationErrors:Function
             case "whyACM":
               fieldIsValid = hasAtLeast30Words(formData.whyACM);
               break;
-            case "cgpa":
-              fieldIsValid = regexProper(formData.cgpa, "cg");
-              break;
+            // case "cgpa":
+            //   fieldIsValid = regexProper(formData.cgpa, "cg");
+            //   break;
           }
         }
         

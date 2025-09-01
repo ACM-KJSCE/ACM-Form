@@ -65,7 +65,6 @@ const Admin: React.FC = () => {
         "email",
         "rollNumber",
         "branch",
-        "cgpa",
         "phoneNumber",
         "githubProfile",
         "linkedinProfile",
