@@ -187,6 +187,8 @@ const Admin: React.FC = () => {
                 <th className="p-4 text-left">Role 2</th>
                 <th className="p-4 text-left">Status</th>
                 <th className="p-4 text-left">Submitted At</th>
+                <th className="p-4 text-left">Resume Link</th>
+                <th className="p-4 text-left">Profiles</th>
               </tr>
             </thead>
             <tbody>
@@ -218,6 +220,33 @@ const Admin: React.FC = () => {
                     {app.submittedAt
                       ? new Date(app.submittedAt).toLocaleString()
                       : "N/A"}
+                  </td>
+                  <td className="p-4">
+                  {app.resume ? (
+                    <a href={app.resume} className="text-blue-400 underline hover:text-blue-300">Link</a>
+                  ) : (
+                    <span className="text-gray-500">Not uploaded</span>
+                  )}
+                  </td>
+
+                  <td className="p-4">
+                    <div className="flex flex-col space-x-2">
+                      {app.githubProfile && (
+                        <a href={app.githubProfile} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
+                          Github
+                        </a>
+                      )}
+                      {app.linkedinProfile && (
+                        <a href={app.linkedinProfile} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
+                          Linkedin
+                        </a>
+                      )}
+                      {app.codechefProfile && (
+                        <a href={app.codechefProfile} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
+                          Codechef
+                        </a>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
