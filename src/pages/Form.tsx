@@ -19,7 +19,6 @@ function Form() {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
-    rollNumber: "",
     branch: "",
     phoneNumber: "",
     githubProfile: "",
@@ -298,7 +297,7 @@ function Form() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="rollNumber"
                   className="block text-sm font-medium text-gray-300"
@@ -320,7 +319,7 @@ function Form() {
                 {touched.rollNumber && validationErrors.rollNumber && (
                   <p className="mt-1 text-sm text-red-500">Please enter a valid roll number</p>
                 )}
-              </div>
+              </div> */}
 
               <div>
                 <label

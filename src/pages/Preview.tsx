@@ -96,12 +96,12 @@ function Preview() {
                 </span>
                 <span className="block mt-1 text-white">{formData.email}</span>
               </div>
-              <div>
+              {/* <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Roll Number
                 </span>
                 <span className="block mt-1 text-white">{formData.rollNumber}</span>
-              </div>
+              </div> */}
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Branch

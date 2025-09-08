@@ -1,7 +1,6 @@
 interface FormData {
   fullName: string;
   email: string;
-  rollNumber: string;
   branch: string;
   phoneNumber: string;
   githubProfile: string;
