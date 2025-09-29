@@ -5,7 +5,7 @@ import Thankyou from "../pages/Thankyou";
 import Admin from "../pages/Admin";
 import Preview from "../pages/Preview";
 import Formclosed from "../pages/Formclosed";
-import Form from "../pages/Form";
+// import Form from "../pages/Form";
 
 const router = createBrowserRouter([
     {
@@ -24,14 +24,14 @@ const router = createBrowserRouter([
             </> 
         )
     },
-    {
-        path: '/form',
-        element: (
-            <>
-                <Form/>
-            </>
-        )
-    },
+    // {
+    //     path: '/form',
+    //     element: (
+    //         <>
+    //             <Form/>
+    //         </>
+    //     )
+    // },
     {
         path:"/success",
         element: (
