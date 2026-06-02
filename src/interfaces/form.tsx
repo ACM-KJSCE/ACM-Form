@@ -2,6 +2,9 @@ interface FormData {
   fullName: string;
   email: string;
   branch: string;
+  rollNumber: string;
+  year: string;
+  cgpa: string;
   phoneNumber: string;
   githubProfile: string;
   linkedinProfile: string;

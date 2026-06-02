@@ -24,6 +24,9 @@ function Form() {
     githubProfile: "",
     linkedinProfile: "",
     codechefProfile: "",
+    rollNumber: "",
+    year: "",
+    cgpa: "",
     resume: "",
     whyACM: "",
     role: "",
@@ -34,23 +37,24 @@ function Form() {
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const roleFY: string[] = [
-    "Technical Team",
-    "Creative Team",
-    "Marketing Team",
-    "Operations Team",
+  const roleSY: string[] = [
+    "Technical Team Member",
+    "Marketing Team Member",
+    "Media & Graphics Team Member",
   ];
 
-  // const roleTY: string[] = [
-  //   "Chairperson",
-  //   "Vice Chairperson",
-  //   "Secretary",
-  //   "Treasurer",
-  //   "Technical Head",
-  //   "Creative Head",
-  //   "Marketing Head",
-  //   "Operations Head",
-  // ];
+  const roleTY: string[] = [
+    "Chairperson",
+    "Vice Chairperson",
+    "Treasurer",
+    "Secretary",
+    "Technical Head",
+    "Marketing Head",
+    "Media & Graphics Head",
+    "Jt. Technical Head",
+    "Jt. Marketing Head",
+    "Jt. Media & Graphics Head",
+  ];
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -248,10 +252,10 @@ function Form() {
         <div className="bg-black/30 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 p-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
-              KJSCE ACM Application
+              KJSSE ACM Application
             </h1>
             <p className="text-gray-400 text-lg">
-              Fill in your details to apply for KJSCE ACM
+              Fill in your details to apply for KJSSE ACM
             </p>
           </div>
 
@@ -297,7 +301,7 @@ function Form() {
                 />
               </div>
 
-              {/* <div>
+              <div>
                 <label
                   htmlFor="rollNumber"
                   className="block text-sm font-medium text-gray-300"
@@ -319,7 +323,7 @@ function Form() {
                 {touched.rollNumber && validationErrors.rollNumber && (
                   <p className="mt-1 text-sm text-red-500">Please enter a valid roll number</p>
                 )}
-              </div> */}
+              </div>
 
               <div>
                 <label
@@ -356,12 +360,12 @@ function Form() {
                 )}
               </div>
 
-              {/* <div>
+              <div>
                 <label
                   htmlFor="year"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Year (as of 25-26)<text className="text-red-600">*</text>
+                  Year (as of 26-27)<text className="text-red-600">*</text>
                 </label>
                 <select
                   name="year"
@@ -379,9 +383,9 @@ function Form() {
                 {touched.year && validationErrors.year && (
                   <p className="mt-1 text-sm text-red-500">Please select your year</p>
                 )}
-              </div> */}
+              </div>
 
-              {/* <div>
+              <div>
                 <label
                   htmlFor="cgpa"
                   className="block text-sm font-medium text-gray-300"
@@ -403,7 +407,7 @@ function Form() {
                 {touched.cgpa && validationErrors.cgpa && (
                   <p className="mt-1 text-sm text-red-500">Please enter a valid CGPA</p>
                 )}
-              </div> */}
+              </div>
 
               <div>
                 <label
@@ -434,7 +438,7 @@ function Form() {
                   htmlFor="githubProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  GitHub Profile
+                  GitHub Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -457,7 +461,7 @@ function Form() {
                   htmlFor="linkedinProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  LinkedIn Profile
+                  LinkedIn Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -480,7 +484,7 @@ function Form() {
                   htmlFor="codechefProfile"
                   className="block text-sm font-medium text-gray-300"
                 >
-                  Codechef Profile
+                  Codechef Profile<text className="text-red-600">*</text>
                 </label>
                 <input
                   type="url"
@@ -541,18 +545,25 @@ function Form() {
                 aria-label="Select your first role preference"
                 className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role")}`}
               >
-                <option value="">Select Role </option>
-                {roleFY.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
+
+                <option value="">Select Role </option> 
+                {formData.year === "2"
+                ? roleSY.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))
+                : ( formData.year === "3" ? roleTY.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  )) : null)}
               </select>
               {touched.role && validationErrors.role && (
                 <p className="mt-1 text-sm text-red-500">
                   {formData.role === formData.role2 && formData.role ? 
                     "First and second choices must be different" : 
-                    "Please select a role"}
+                    (formData.year == "2" || formData.year == "3" ? "Please select a role" : "Please select a year first")}
                 </p>
               )}
             </div>
@@ -577,17 +588,23 @@ function Form() {
                 className={`disabled:opacity-50 disabled:cursor-not-allowed ${getInputClasses("role2")}`}
               >
                 <option value="">Select Role </option>
-                {roleFY.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
+                {formData.year === "2"
+                  ? roleSY.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))
+                  : (formData.year === "3" ? roleTY.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    )) : null)}
               </select>
               {touched.role2 && validationErrors.role2 && (
                 <p className="mt-1 text-sm text-red-500">
                   {formData.role === formData.role2 && formData.role2 ? 
                     "First and second choices must be different" : 
-                    "Please select a second role"}
+                    (formData.year == "2" || formData.year == "3" ? "Please select a role" : "Please select a year first")}
                 </p>
               )}
             </div>
@@ -615,11 +632,11 @@ function Form() {
               )}
             </div>
 
-            <div className="flex justify-end space-x-4 pt-4">
+            <div className="flex sm:flex-row flex-col-reverse justify-end sm:space-x-4 pt-4 gap-4 sm:gap-0">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="px-6 py-2.5 text-sm font-medium text-gray-300 hover:text-red-500 hover:scale-105 cursor-pointer transition-all"
+                className="px-8 py-2.5 bg-gradient-to-b from-red-500 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
               >
                 Logout
               </button>
@@ -627,7 +644,7 @@ function Form() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
+                  className="px-8 py-2.5 bg-gradient-to-b from-blue-500 to-blue-900 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
                 >
                   {loading ? (
                     <>

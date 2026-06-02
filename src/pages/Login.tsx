@@ -18,7 +18,7 @@ function Login() {
         if (currentUser.email?.endsWith("somaiya.edu") && docSnap.exists() && docSnap.data()?.submitted) {
           navigate("/success");
         } else if (currentUser.email?.endsWith("somaiya.edu")) {
-          navigate("/formclosed");
+          navigate("/form");
         } else {
           signOut(auth).then(() => {
             setError("Please use a Somaiya email address (@somaiya.edu)");
@@ -54,7 +54,7 @@ function Login() {
       <div className="p-8  rounded-xl shadow-2xl w-96 border border-gray-700 bg-black/50">
         <div className="text-center flex justify-center flex-col">
           <h1 className="text-3xl font-bold text-white mb-6 tracking-tight">
-            KJSCE ACM Application
+            KJSSE ACM Application
           </h1>
           <div className="relative mx-auto mb-8">
             <img

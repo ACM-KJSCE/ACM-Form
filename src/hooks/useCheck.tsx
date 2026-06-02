@@ -18,9 +18,9 @@ const validateField = (name: string, value: string, setValidationErrors:Function
       isValid = false;
     } else {
       switch (name) {
-        // case "rollNumber":
-        //   isValid = regexProper(value, "roll");
-        //   break;
+        case "rollNumber":
+          isValid = regexProper(value, "roll");
+          break;
         case "phoneNumber":
           isValid = regexProper(value, "phone");
           break;
@@ -65,8 +65,8 @@ const validateField = (name: string, value: string, setValidationErrors:Function
       setTouched(allTouched);
       
       const requiredFields = [
-        "branch", "phoneNumber", 
-        // "githubProfile", "linkedinProfile", "codechefProfile", "rollNumber",
+        "branch", "phoneNumber", "cgpa", 
+        "githubProfile", "linkedinProfile", "codechefProfile", "rollNumber",
         "resume", "whyACM", "role", "role2"
       ];
       
@@ -77,9 +77,9 @@ const validateField = (name: string, value: string, setValidationErrors:Function
           fieldIsValid = false;
         } else {
           switch (field) {
-            // case "rollNumber":
-            //   fieldIsValid = regexProper(formData.rollNumber, "roll");
-            //   break;
+            case "rollNumber":
+              fieldIsValid = regexProper(formData.rollNumber, "roll");
+              break;
             case "phoneNumber":
               fieldIsValid = regexProper(formData.phoneNumber, "phone");
               break;
@@ -98,9 +98,9 @@ const validateField = (name: string, value: string, setValidationErrors:Function
             case "whyACM":
               fieldIsValid = hasAtLeast30Words(formData.whyACM);
               break;
-            // case "cgpa":
-            //   fieldIsValid = regexProper(formData.cgpa, "cg");
-            //   break;
+            case "cgpa":
+              fieldIsValid = regexProper(formData.cgpa, "cg");
+              break;
           }
         }
         

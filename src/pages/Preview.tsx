@@ -75,7 +75,7 @@ function Preview() {
         <div className="bg-black/30 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 p-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
-              KJSCE ACM Application Preview
+              KJSSE ACM Application Preview
             </h1>
             <p className="text-gray-400 text-lg">
               Here is your submitted application.
@@ -96,32 +96,32 @@ function Preview() {
                 </span>
                 <span className="block mt-1 text-white">{formData.email}</span>
               </div>
-              {/* <div>
+              <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Roll Number
                 </span>
                 <span className="block mt-1 text-white">{formData.rollNumber}</span>
-              </div> */}
+              </div>
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Branch
                 </span>
                 <span className="block mt-1 text-white">{formData.branch}</span>
               </div>
-              {/* <div>
+              <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Year
                 </span>
                 <span className="block mt-1 text-white">
                   {formData.year === "2" ? "Second Year" : formData.year === "3" ? "Third Year" : formData.year}
                 </span>
-              </div> */}
-              {/* <div>
+              </div>
+              <div>
                 <span className="block text-sm font-medium text-gray-300">
                   CGPA
                 </span>
                 <span className="block mt-1 text-white">{formData.cgpa}</span>
-              </div> */}
+              </div>
               <div>
                 <span className="block text-sm font-medium text-gray-300">
                   Phone Number
@@ -207,7 +207,7 @@ function Preview() {
             <button
               type="button"
               onClick={handleLogout}
-              className="px-6 py-2.5 text-sm font-medium text-gray-300 hover:text-red-500 hover:scale-105 cursor-pointer transition-all"
+              className="px-8 py-2.5 bg-gradient-to-b from-red-500 to-red-900 text-white rounded-lg hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
             >
               Logout
             </button>

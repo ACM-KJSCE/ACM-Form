@@ -5,7 +5,7 @@ function Formclosed() {
       <div className="p-8  rounded-xl shadow-2xl w-96 border border-gray-700 bg-black/50">
         <div className="text-center flex justify-center flex-col">
           <h1 className="text-3xl font-bold text-white mb-6 tracking-tight">
-            KJSCE ACM Application
+            KJSSE ACM Application
           </h1>
           <div className="relative mx-auto">
             <img

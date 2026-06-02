@@ -12,13 +12,16 @@ const Admin: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showSubmittedOnly, setShowSubmittedOnly] = useState(false);
+  const [selectedYear, setSelectedYear] = useState("All");
   const auth = getAuth();
   const navigate = useNavigate();
   const { showToast } = useToast();
 
   const stats = {
     total: applications.length,
-    submitted: applications.filter((app) => app.submitted).length
+    submitted: applications.filter((app) => app.submitted).length,
+    secondYear: applications.filter((app) => app.year === "Second Year").length,
+    thirdYear: applications.filter((app) => app.year === "Third Year").length,
   };
 
   useEffect(() => {
@@ -28,12 +31,7 @@ const Admin: React.FC = () => {
         return;
       }
 
-      const isAdmin = user.email === "minav.karia@somaiya.edu" || true;
-      if (!isAdmin) {
-        showToast("Unauthorized access", "error");
-        navigate("/");
-        return;
-      }
+      
 
       try {
         const querySnapshot = await getDocs(collection(db, "applications"));
@@ -72,6 +70,7 @@ const Admin: React.FC = () => {
         "resume",
         "role",
         "role2",
+        "cgpa",
         "whyACM",
         "submitted",
         "submittedAt",
@@ -101,7 +100,12 @@ const Admin: React.FC = () => {
   const displayedApplications = (showSubmittedOnly
     ? applications.filter((app) => app.submitted)
     : applications
-  ).sort((a, b) => {
+  )
+    .filter((app) => {
+      if (selectedYear === "All") return true;
+      return String(app.year) === selectedYear;
+    })
+    .sort((a, b) => {
     if (!a.submittedAt) return 1;
     if (!b.submittedAt) return -1;
     return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
@@ -133,6 +137,21 @@ const Admin: React.FC = () => {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">ACM Applications</h1>
           <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <label htmlFor="yearFilter" className="text-sm text-gray-300">
+                Year
+              </label>
+              <select
+                id="yearFilter"
+                value={selectedYear}
+                onChange={(event) => setSelectedYear(event.target.value)}
+                className="bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg"
+              >
+                <option value="All">All</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
             <button
               onClick={downloadExcel}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -163,14 +182,14 @@ const Admin: React.FC = () => {
               {stats.submitted}
             </p>
           </div>
-          {/* <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm">Second Year</h3>
             <p className="text-2xl font-bold">{stats.secondYear}</p>
           </div>
           <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm">Third Year</h3>
             <p className="text-2xl font-bold">{stats.thirdYear}</p>
-          </div> */}
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -179,9 +198,10 @@ const Admin: React.FC = () => {
               <tr className="bg-gray-800">
                 <th className="p-4 text-left">Name</th>
                 <th className="p-4 text-left">Email</th>
-                {/* <th className="p-4 text-left">Roll Number</th> */}
+                <th className="p-4 text-left">Roll Number</th>
                 <th className="p-4 text-left">Branch</th>
-                {/* <th className="p-4 text-left">Year</th> */}
+                <th className="p-4 text-left">Year</th>
+                <th className="p-4 text-left">CGPA</th>
                 <th className="p-4 text-left">Phone</th>
                 <th className="p-4 text-left">Role</th>
                 <th className="p-4 text-left">Role 2</th>
@@ -199,9 +219,10 @@ const Admin: React.FC = () => {
                 >
                   <td className="p-4">{app.fullName}</td>
                   <td className="p-4">{app.email}</td>
-                  {/* <td className="p-4">{app.rollNumber}</td> */}
+                  <td className="p-4">{app.rollNumber}</td>
                   <td className="p-4">{app.branch}</td>
-                  {/* <td className="p-4">{app.year}</td> */}
+                  <td className="p-4">{app.year}</td>
+                  <td className="p-4">{app.cgpa}</td>
                   <td className="p-4">{app.phoneNumber}</td>
                   <td className="p-4">{app.role}</td>
                   <td className="p-4">{app.role2}</td>
