@@ -18,7 +18,7 @@ function Login() {
         if (currentUser.email?.endsWith("somaiya.edu") && docSnap.exists() && docSnap.data()?.submitted) {
           navigate("/success");
         } else if (currentUser.email?.endsWith("somaiya.edu")) {
-          navigate("/form");
+          navigate("/formclosed");
         } else {
           signOut(auth).then(() => {
             setError("Please use a Somaiya email address (@somaiya.edu)");
